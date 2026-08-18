@@ -1,0 +1,7 @@
+pytz==2025.2
+xwrf
+memray
+dask
+pytest
+rio-cogeo
+morecantile

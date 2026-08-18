@@ -1,0 +1,67 @@
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+      target: production
+      args:
+        - BASE_PATH=${BASE_PATH}
+        - PUBLIC_API_URL=${PUBLIC_API_URL}
+    ports:
+      - "${HOST_CLIENT_PORT}:3000"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+      target: production
+    ports:
+      - "${HOST_SERVER_PORT}:8000"
+    volumes:
+      - ${STORAGE_LOCATION}:/data
+      - ${DB_LOCATION}:/db
+    environment:
+      - STORAGE_DIR=/data
+      - DB_PATH=/db/${DB_NAME}
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '8.0'
+          memory: 2G
+        reservations:
+          cpus: '2.0'
+          memory: 1G
+
+  registry:
+    build:
+      args:
+        USER_ID: ${USER_ID}
+        GROUP_ID: ${GROUP_ID}
+      context: ./registry
+      dockerfile: Dockerfile
+    volumes:
+      - ./registry:/app
+      - ${STORAGE_LOCATION}:/data
+      - ${DB_LOCATION}:/db
+    environment:
+      - STORAGE_DIR=/data
+      - DB_PATH=/db/${DB_NAME}
+    command: python register.py --help
+    deploy:
+      resources:
+        limits:
+          cpus: '4.0'
+          memory: 4G
+        reservations:
+          cpus: '0.5'
+          memory: 512M

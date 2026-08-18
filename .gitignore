@@ -1,0 +1,22 @@
+# macOS
+.DS_Store
+
+# Env files
+.env
+.env.*
+!.env.example
+
+# Editor/IDE
+.vscode/
+.idea/
+
+# Data files
+storage/
+
+# Claude local instruction
+CLAUDE.local.md
+.claude/
+
+tmp/
+experiment
+report-artifacts/
