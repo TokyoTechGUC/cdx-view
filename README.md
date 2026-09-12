@@ -5,6 +5,7 @@ cdx-view is a web application for sharing geospatial climate data (such as Weath
 See the [wiki](https://github.com/TokyoTechGUC/cdx-view/wiki) for details:
 
 - **[Home](https://github.com/TokyoTechGUC/cdx-view/wiki/Home)** — architecture overview and components
+- **[Deployment](https://github.com/TokyoTechGUC/cdx-view/wiki/Deployment)** — how to stand up a production instance behind Apache
 - **[Data Registration](https://github.com/TokyoTechGUC/cdx-view/wiki/Data-Registration)** — how to get a dataset into the catalog and viewable in the app
 
 ## License
