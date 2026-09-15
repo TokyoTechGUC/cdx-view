@@ -1,3 +1,5 @@
+import os
+
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from titiler.core.factory import ColorMapFactory
@@ -28,15 +30,10 @@ app = FastAPI()
 
 app.add_middleware(ForwardedPrefixMiddleware)
 
-# Development purpose
-# TODO: avoid hardcoded port number
+cors_origins = os.environ.get("CORS_ALLOW_ORIGINS", "")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://localhost:5174",
-        "http://localhost:5180",
-    ],
+    allow_origins=[origin.strip() for origin in cors_origins.split(",") if origin.strip()],
     allow_credentials=True,
     allow_methods=["GET", "OPTIONS"],
     allow_headers=["Content-Type"],
