@@ -38,6 +38,7 @@ services:
     environment:
       - STORAGE_DIR=/data
       - DB_PATH=/db/${DB_NAME}
+      - CORS_ALLOW_ORIGINS=${CORS_ALLOW_ORIGINS}
     command:
       - uvicorn
       - app.main:app
