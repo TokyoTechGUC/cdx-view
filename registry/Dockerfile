@@ -3,6 +3,8 @@ FROM mambaorg/micromamba:2.5.0 AS base
 USER root
 ARG MAMBA_USER_ID=57439
 ARG MAMBA_USER_GID=57439
+RUN usermod --uid "${MAMBA_USER_ID}" "${MAMBA_USER}" && \
+    groupmod --gid "${MAMBA_USER_GID}" "${MAMBA_USER}"
 
 # Install system dependencies (if needed for scientific libs)
 RUN apt-get update && apt-get install -y --no-install-recommends \
