@@ -46,8 +46,8 @@ services:
   registry:
     build:
       args:
-        USER_ID: ${USER_ID}
-        GROUP_ID: ${GROUP_ID}
+        MAMBA_USER_ID: ${USER_ID}
+        MAMBA_USER_GID: ${GROUP_ID}
       context: ./registry
       dockerfile: Dockerfile
     volumes:

@@ -63,7 +63,6 @@ services:
         MAMBA_USER_GID: ${GROUP_ID}
       context: ./registry
       dockerfile: Dockerfile
-    user: "${USER_ID}:${GROUP_ID}"
     volumes:
       - ./registry:/app
       - ${STORAGE_LOCATION}:/data
