@@ -33,6 +33,7 @@ services:
       - STORAGE_DIR=/data
       - DB_PATH=/db/${DB_NAME}
       - CORS_ALLOW_ORIGINS=${CORS_ALLOW_ORIGINS}
+      - FORWARDED_ALLOW_IPS=${FORWARDED_ALLOW_IPS:-127.0.0.1}
     restart: unless-stopped
     deploy:
       resources:

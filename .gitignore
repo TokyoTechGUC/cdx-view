@@ -6,6 +6,9 @@
 .env.*
 !.env.example
 
+# Local per-deployment overrides (e.g. pinning the docker network subnet)
+docker-compose.override.yml
+
 # Editor/IDE
 .vscode/
 .idea/
