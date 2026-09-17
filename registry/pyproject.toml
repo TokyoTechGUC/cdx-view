@@ -23,9 +23,6 @@ dev = ["pytest"]
 
 [tool.uv]
 package = false
-# netcdf4's metadata declares a numpy constraint scoped to Windows on ARM64
-# that makes universal resolution unsatisfiable; we never target that
-# platform, so restrict resolution to what we actually deploy/develop on.
 environments = [
     "sys_platform == 'linux'",
     "sys_platform == 'darwin'",

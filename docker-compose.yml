@@ -53,8 +53,6 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./registry:/app
-      # Anonymous volume carves .venv out of the bind mount above, so the
-      # image's Linux venv isn't shadowed by the host's filesystem.
       - /app/.venv
       - ${STORAGE_LOCATION}:/data
       - ${DB_LOCATION}:/db
