@@ -1,0 +1,32 @@
+[project]
+name = "cdx-view-registry"
+version = "0.1.0"
+description = "CLI for registering and preprocessing datasets for cdx-view"
+requires-python = ">=3.10,<3.11"
+dependencies = [
+    "numpy",
+    "xarray",
+    "netCDF4",
+    "zarr",
+    "rioxarray",
+    "rasterio",
+    "dask",
+    "morecantile",
+    "xwrf",
+    "pytz",
+    "rio-cogeo",
+    "memray",
+]
+
+[dependency-groups]
+dev = ["pytest"]
+
+[tool.uv]
+package = false
+# netcdf4's metadata declares a numpy constraint scoped to Windows on ARM64
+# that makes universal resolution unsatisfiable; we never target that
+# platform, so restrict resolution to what we actually deploy/develop on.
+environments = [
+    "sys_platform == 'linux'",
+    "sys_platform == 'darwin'",
+]
