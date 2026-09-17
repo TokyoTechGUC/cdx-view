@@ -1,0 +1,26 @@
+[project]
+name = "cdx-view-server"
+version = "0.1.0"
+description = "Tile-serving API for cdx-view"
+requires-python = ">=3.10,<3.11"
+dependencies = [
+    "fastapi",
+    "pydantic",
+    "uvicorn",
+    "mercantile",
+    "titiler.core",
+    "titiler.xarray[full]",
+    "numpy",
+    "pandas",
+    "xarray",
+    "netCDF4",
+    "scipy",
+    "matplotlib",
+]
+
+[tool.uv]
+package = false
+environments = [
+    "sys_platform == 'linux'",
+    "sys_platform == 'darwin'",
+]
