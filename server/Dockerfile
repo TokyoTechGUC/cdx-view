@@ -1,4 +1,6 @@
 FROM ghcr.io/astral-sh/uv:python3.10-bookworm-slim AS builder
+# numcodecs (pulled in via titiler.xarray -> zarr) has no prebuilt wheel for
+# this platform, so it needs a compiler to build from source.
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
@@ -9,6 +11,8 @@ COPY pyproject.toml uv.lock ./
 RUN uv sync --locked
 
 FROM python:3.10-slim-bookworm AS base
+# rasterio's wheel dynamically links libexpat at runtime; it's not bundled
+# in the wheel and slim-bookworm doesn't ship it by default.
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libexpat1 \
     && rm -rf /var/lib/apt/lists/*

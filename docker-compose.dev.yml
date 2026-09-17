@@ -33,6 +33,8 @@ services:
       - "${HOST_SERVER_PORT}:8000"
     volumes:
       - ./server:/app
+      # Anonymous volume carves .venv out of the bind mount above, so the
+      # image's Linux venv isn't shadowed by the host's (macOS) filesystem.
       - /app/.venv
       - ${STORAGE_LOCATION}:/data
       - ${DB_LOCATION}:/db
