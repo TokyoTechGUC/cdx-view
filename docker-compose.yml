@@ -47,12 +47,15 @@ services:
   registry:
     build:
       args:
-        MAMBA_USER_ID: ${USER_ID}
-        MAMBA_USER_GID: ${GROUP_ID}
+        USER_ID: ${USER_ID}
+        GROUP_ID: ${GROUP_ID}
       context: ./registry
       dockerfile: Dockerfile
     volumes:
       - ./registry:/app
+      # Anonymous volume carves .venv out of the bind mount above, so the
+      # image's Linux venv isn't shadowed by the host's filesystem.
+      - /app/.venv
       - ${STORAGE_LOCATION}:/data
       - ${DB_LOCATION}:/db
     environment:
