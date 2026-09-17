@@ -206,18 +206,18 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "fastapi", specifier = "==0.128.1" },
-    { name = "matplotlib", specifier = "==3.10.8" },
-    { name = "mercantile", specifier = "==1.2.1" },
-    { name = "netcdf4", specifier = "==1.7.4" },
-    { name = "numpy", specifier = "==2.2.6" },
-    { name = "pandas", specifier = "==2.2.3" },
-    { name = "pydantic", specifier = "==2.12.5" },
-    { name = "scipy", specifier = "==1.15.2" },
+    { name = "fastapi" },
+    { name = "matplotlib" },
+    { name = "mercantile" },
+    { name = "netcdf4" },
+    { name = "numpy" },
+    { name = "pandas" },
+    { name = "pydantic" },
+    { name = "scipy" },
     { name = "titiler-core" },
     { name = "titiler-xarray", extras = ["full"] },
-    { name = "uvicorn", specifier = "==0.40.0" },
-    { name = "xarray", specifier = "==2025.1.2" },
+    { name = "uvicorn" },
+    { name = "xarray" },
 ]
 
 [[package]]
