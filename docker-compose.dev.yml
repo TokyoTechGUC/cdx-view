@@ -33,6 +33,7 @@ services:
       - "${HOST_SERVER_PORT}:8000"
     volumes:
       - ./server:/app
+      - /app/.venv
       - ${STORAGE_LOCATION}:/data
       - ${DB_LOCATION}:/db
     environment:
