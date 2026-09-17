@@ -26,4 +26,5 @@ FROM base AS production
 WORKDIR /app
 COPY --chown=$MAMBA_USER:$MAMBA_USER . .
 EXPOSE 8000
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "4"]
+CMD uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 4 \
+    --proxy-headers --forwarded-allow-ips "${FORWARDED_ALLOW_IPS:-127.0.0.1}"
