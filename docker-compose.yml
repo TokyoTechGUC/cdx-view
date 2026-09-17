@@ -51,6 +51,7 @@ services:
         GROUP_ID: ${GROUP_ID}
       context: ./registry
       dockerfile: Dockerfile
+      target: production
     volumes:
       - ./registry:/app
       - /app/.venv
