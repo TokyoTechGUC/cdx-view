@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount, onDestroy, untrack } from "svelte";
-  import maplibregl from "maplibre-gl";
+  import * as maplibregl from "maplibre-gl";
   import { datasetView } from "$lib/state/datasetState.svelte";
   import { mapView } from "$lib/state/mapState.svelte";
   import {
