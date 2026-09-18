@@ -60,12 +60,14 @@ services:
   registry-dev:
     build:
       args:
-        MAMBA_USER_ID: ${USER_ID}
-        MAMBA_USER_GID: ${GROUP_ID}
+        USER_ID: ${USER_ID}
+        GROUP_ID: ${GROUP_ID}
       context: ./registry
       dockerfile: Dockerfile
+      target: development
     volumes:
       - ./registry:/app
+      - /app/.venv
       - ${STORAGE_LOCATION}:/data
       - ${DB_LOCATION}:/db
     environment:

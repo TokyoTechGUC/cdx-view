@@ -1,30 +1,39 @@
-FROM mambaorg/micromamba:2.5.0 AS base
-
-USER root
-ARG MAMBA_USER_ID=57439
-ARG MAMBA_USER_GID=57439
-RUN usermod --uid "${MAMBA_USER_ID}" "${MAMBA_USER}" && \
-    groupmod --gid "${MAMBA_USER_GID}" "${MAMBA_USER}"
-
-# Install system dependencies (if needed for scientific libs)
+FROM ghcr.io/astral-sh/uv:python3.10-bookworm-slim AS builder-base
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
-
-USER $MAMBA_USER
 WORKDIR /app
+ENV UV_COMPILE_BYTECODE=1 \
+    UV_LINK_MODE=copy
+COPY pyproject.toml uv.lock ./
 
-COPY --chown=$MAMBA_USER:$MAMBA_USER env.yml ./env.yml
-RUN micromamba install -y -n base -f ./env.yml && \
-    micromamba clean --all --yes
-# Excute RUN commands with activated conda environment
-ARG MAMBA_DOCKERFILE_ACTIVATE=1
+FROM builder-base AS builder-development
+RUN uv sync --locked
 
-# Install Python dependencies if a requirements file exists
-COPY --chown=$MAMBA_USER:$MAMBA_USER requirements.txt ./
-RUN pip install --no-cache-dir --upgrade pip \
-	&& pip install --no-cache-dir -r requirements.txt
+FROM builder-base AS builder-production
+RUN uv sync --locked --no-dev
 
-COPY --chown=$MAMBA_USER:$MAMBA_USER . .
+FROM python:3.10-slim-bookworm AS base
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libexpat1 \
+    && rm -rf /var/lib/apt/lists/*
+ARG USER_ID=57439
+ARG GROUP_ID=57439
+RUN groupadd --gid "${GROUP_ID}" app && \
+    useradd --uid "${USER_ID}" --gid app --create-home --no-log-init app
+WORKDIR /app
+RUN chown app:app /app
+USER app
+ENV PATH="/app/.venv/bin:$PATH"
 
-CMD ["python", "registry.py", "--help"]
+# Development stage
+FROM base AS development
+COPY --from=builder-development --chown=app:app /app/.venv /app/.venv
+COPY --chown=app:app . .
+CMD ["python", "register.py", "--help"]
+
+# Production stage
+FROM base AS production
+COPY --from=builder-production --chown=app:app /app/.venv /app/.venv
+COPY --chown=app:app . .
+CMD ["python", "register.py", "--help"]
