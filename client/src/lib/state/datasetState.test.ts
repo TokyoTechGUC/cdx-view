@@ -34,6 +34,7 @@ function makeDataset(overrides?: Partial<Dataset>): Dataset {
         vmin: -10,
         vmax: 10,
         units: "m/s",
+        long_name: null,
         times: null,
         colormap: null,
       },
