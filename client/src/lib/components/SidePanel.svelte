@@ -139,7 +139,7 @@
         value={projectView.activeDatasetId}
         onchange={onScenarioChange}
       >
-        {#each projectView.datasets as dataset}
+        {#each projectView.datasets as dataset (dataset.id)}
           <option value={dataset.id}>{dataset.name}</option>
         {/each}
       </select>

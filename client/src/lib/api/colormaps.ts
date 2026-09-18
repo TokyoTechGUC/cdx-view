@@ -1,4 +1,4 @@
-import { PUBLIC_API_URL } from '$env/static/public';
+import { PUBLIC_API_URL } from "$env/static/public";
 
 export type RGBA = [number, number, number, number];
 export type ColormapLUT = RGBA[];
@@ -17,7 +17,8 @@ export async function fetchColormap(name: string): Promise<ColormapLUT> {
 
   const promise = (async () => {
     const res = await fetch(`${PUBLIC_API_URL}/colorMaps/${name}`);
-    if (!res.ok) throw new Error(`Failed to fetch colormap ${name}: ${res.status}`);
+    if (!res.ok)
+      throw new Error(`Failed to fetch colormap ${name}: ${res.status}`);
     const json = (await res.json()) as Record<string, RGBA>;
     const lut: ColormapLUT = [];
     for (let i = 0; i < 256; i++) {

@@ -13,6 +13,7 @@ function makeDataset(overrides?: Partial<Dataset>): Dataset {
     id: "d1",
     name: "SSP1",
     description: null,
+    format: "zarr",
     variables: [
       {
         name: "T2",

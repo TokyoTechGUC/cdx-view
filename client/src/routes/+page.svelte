@@ -1,7 +1,7 @@
 <script lang="ts">
   import { browser } from "$app/environment";
   import { goto } from "$app/navigation";
-  import { base } from "$app/paths";
+  import { resolve } from "$app/paths";
   import Map from "$lib/components/Map.svelte";
   import SidePanel from "$lib/components/SidePanel.svelte";
   import { datasetView } from "$lib/state/datasetState.svelte";
@@ -15,7 +15,7 @@
 
   $effect(() => {
     if (!datasetView.dataset && backgroundView.layers.length === 0) {
-      goto(`${base}/projects`);
+      goto(resolve("/projects"));
     }
   });
 </script>

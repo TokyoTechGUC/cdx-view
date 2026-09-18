@@ -4,7 +4,9 @@ import { formatTime } from "./formatTime";
 describe("formatTime", () => {
   // --- naive datetimes (no timezone info) ---
   it("formats naive datetime with nanosecond precision", () => {
-    expect(formatTime("2020-06-01T12:00:00.000000000")).toBe("2020-06-01 12:00");
+    expect(formatTime("2020-06-01T12:00:00.000000000")).toBe(
+      "2020-06-01 12:00",
+    );
   });
 
   it("formats naive datetime with microsecond precision", () => {
@@ -16,7 +18,9 @@ describe("formatTime", () => {
   });
 
   it("formats naive datetime at midnight", () => {
-    expect(formatTime("2020-01-01T00:00:00.000000000")).toBe("2020-01-01 00:00");
+    expect(formatTime("2020-01-01T00:00:00.000000000")).toBe(
+      "2020-01-01 00:00",
+    );
   });
 
   // --- UTC ---
@@ -29,20 +33,28 @@ describe("formatTime", () => {
   });
 
   it("formats UTC datetime with nanosecond precision Z suffix", () => {
-    expect(formatTime("2020-06-01T12:00:00.000000000Z")).toBe("2020-06-01 12:00 UTC");
+    expect(formatTime("2020-06-01T12:00:00.000000000Z")).toBe(
+      "2020-06-01 12:00 UTC",
+    );
   });
 
   // --- offset-aware ---
   it("formats datetime with positive offset", () => {
-    expect(formatTime("2020-06-01T12:00:00+09:00")).toBe("2020-06-01 12:00 +09:00");
+    expect(formatTime("2020-06-01T12:00:00+09:00")).toBe(
+      "2020-06-01 12:00 +09:00",
+    );
   });
 
   it("formats datetime with negative offset", () => {
-    expect(formatTime("2020-06-01T12:00:00-05:00")).toBe("2020-06-01 12:00 -05:00");
+    expect(formatTime("2020-06-01T12:00:00-05:00")).toBe(
+      "2020-06-01 12:00 -05:00",
+    );
   });
 
   it("formats datetime with zero offset", () => {
-    expect(formatTime("2020-06-01T12:00:00+00:00")).toBe("2020-06-01 12:00 +00:00");
+    expect(formatTime("2020-06-01T12:00:00+00:00")).toBe(
+      "2020-06-01 12:00 +00:00",
+    );
   });
 
   // --- fallback ---
