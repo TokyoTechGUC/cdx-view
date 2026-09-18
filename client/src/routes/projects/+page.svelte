@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
-  import { base } from "$app/paths";
+  import { resolve } from "$app/paths";
   import {
     listProjects,
     getProject,
@@ -41,7 +41,7 @@
       const info = await getDatasetInfo(dataset.id, selected.name);
       if (info.times) setVariableTimes(selected.name, info.times);
     }
-    goto(`${base}/`);
+    goto(resolve("/"));
   }
 </script>
 
