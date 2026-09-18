@@ -16,6 +16,7 @@ from pathlib import Path
 from uuid import uuid4
 
 import pytz
+
 from preprocess import preprocess
 
 STORAGE_DIR = Path(os.getenv("STORAGE_DIR", "./storage"))
@@ -102,7 +103,7 @@ def create_project(title: str, description: str | None = None) -> str:
             (project_id, title, description, created_at),
         )
 
-    print(f"Created project:")
+    print("Created project:")
     print(f"  ID:          {project_id}")
     print(f"  Title:       {title}")
     print(f"  Description: {description}")
@@ -138,9 +139,7 @@ def list_projects():
 def delete_project(project_id: str, purge: bool = False):
     """Delete a project and all its datasets. If purge=True, also removes dataset files."""
     with _get_connection() as conn:
-        row = conn.execute(
-            "SELECT title FROM projects WHERE id = ?", (project_id,)
-        ).fetchone()
+        row = conn.execute("SELECT title FROM projects WHERE id = ?", (project_id,)).fetchone()
         if not row:
             print(f"Error: Project not found: {project_id}", file=sys.stderr)
             sys.exit(1)
@@ -205,9 +204,7 @@ def register_dataset(
     # Validate project exists before the expensive preprocessing pipeline.
     # Without this check, an invalid project_id would only surface after minutes of preprocessing.
     with _get_connection(readonly=True) as conn:
-        if not conn.execute(
-            "SELECT id FROM projects WHERE id = ?", (project_id,)
-        ).fetchone():
+        if not conn.execute("SELECT id FROM projects WHERE id = ?", (project_id,)).fetchone():
             print(f"Error: Project not found: {project_id}", file=sys.stderr)
             sys.exit(1)
 
@@ -241,7 +238,8 @@ def register_dataset(
     cm = colormap_overrides or {}
     with _get_connection() as conn:
         conn.execute(
-            "INSERT INTO datasets (id, name, file_path, description, project_id, is_background, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            "INSERT INTO datasets (id, name, file_path, description, project_id, is_background, "
+            "created_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
             (
                 dataset_id,
                 name,
@@ -253,7 +251,8 @@ def register_dataset(
             ),
         )
         conn.executemany(
-            "INSERT INTO variable_stats (dataset_id, variable, vmin, vmax, units, long_name, colormap) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            "INSERT INTO variable_stats (dataset_id, variable, vmin, vmax, units, long_name, "
+            "colormap) VALUES (?, ?, ?, ?, ?, ?, ?)",
             [
                 (
                     dataset_id,
@@ -268,7 +267,7 @@ def register_dataset(
             ],
         )
 
-    print(f"\nSuccessfully registered dataset:")
+    print("\nSuccessfully registered dataset:")
     print(f"  ID:          {dataset_id}")
     print(f"  Name:        {name}")
     print(f"  File:        {relative_path}")
@@ -336,12 +335,14 @@ def list_datasets(project_id: str | None = None):
     with _get_connection(readonly=True) as conn:
         if project_id:
             rows = conn.execute(
-                "SELECT id, name, file_path, description, created_at FROM datasets WHERE project_id = ? ORDER BY created_at DESC",
+                "SELECT id, name, file_path, description, created_at FROM datasets "
+                "WHERE project_id = ? ORDER BY created_at DESC",
                 (project_id,),
             ).fetchall()
         else:
             rows = conn.execute(
-                "SELECT id, name, file_path, description, created_at FROM datasets ORDER BY created_at DESC"
+                "SELECT id, name, file_path, description, created_at FROM datasets "
+                "ORDER BY created_at DESC"
             ).fetchall()
 
     if not rows:
@@ -370,9 +371,7 @@ def edit_dataset(
 ):
     """Edit dataset metadata or update/remove registered variable stats."""
     with _get_connection() as conn:
-        row = conn.execute(
-            "SELECT name FROM datasets WHERE id = ?", (dataset_id,)
-        ).fetchone()
+        row = conn.execute("SELECT name FROM datasets WHERE id = ?", (dataset_id,)).fetchone()
         if not row:
             print(f"Error: Dataset not found: {dataset_id}", file=sys.stderr)
             sys.exit(1)
@@ -380,9 +379,7 @@ def edit_dataset(
         current_name = row[0]
 
         if name is not None:
-            conn.execute(
-                "UPDATE datasets SET name = ? WHERE id = ?", (name, dataset_id)
-            )
+            conn.execute("UPDATE datasets SET name = ? WHERE id = ?", (name, dataset_id))
             print(f"Updated metadata for dataset: {current_name} ({dataset_id})")
             print("  Name: ", name)
         if description is not None:
@@ -416,9 +413,15 @@ def edit_dataset(
                 print(f"  Removed variable: {var}")
 
         var_stat_update_sql = {
-            "units": "UPDATE variable_stats SET units     = ? WHERE dataset_id = ? AND variable = ?",
-            "long_name": "UPDATE variable_stats SET long_name = ? WHERE dataset_id = ? AND variable = ?",
-            "colormap": "UPDATE variable_stats SET colormap  = ? WHERE dataset_id = ? AND variable = ?",
+            "units": (
+                "UPDATE variable_stats SET units     = ? WHERE dataset_id = ? AND variable = ?"
+            ),
+            "long_name": (
+                "UPDATE variable_stats SET long_name = ? WHERE dataset_id = ? AND variable = ?"
+            ),
+            "colormap": (
+                "UPDATE variable_stats SET colormap  = ? WHERE dataset_id = ? AND variable = ?"
+            ),
         }
         stat_updates: dict[str, dict[str, str]] = {}
         for field, overrides in (
@@ -485,27 +488,17 @@ def main():
 
     subparsers.add_parser("list-projects", help="List all registered projects")
 
-    dpp = subparsers.add_parser(
-        "delete-project", help="Delete a project and all its datasets"
-    )
+    dpp = subparsers.add_parser("delete-project", help="Delete a project and all its datasets")
     dpp.add_argument("--id", required=True, help="Project ID to delete")
-    dpp.add_argument(
-        "--purge", action="store_true", help="Also remove dataset files from storage"
-    )
+    dpp.add_argument("--purge", action="store_true", help="Also remove dataset files from storage")
 
     # --- Dataset commands ---
 
-    rdp = subparsers.add_parser(
-        "register-dataset", help="Register a new dataset into a project"
-    )
+    rdp = subparsers.add_parser("register-dataset", help="Register a new dataset into a project")
     rdp.add_argument("--name", required=True, help="Dataset name")
     rdp.add_argument("--file-path", required=True, help="Path to dataset file")
-    rdp.add_argument(
-        "--project-id", required=True, help="Project this dataset belongs to"
-    )
-    rdp.add_argument(
-        "--model", help="Model name which requires preprocessing (optional)"
-    )
+    rdp.add_argument("--project-id", required=True, help="Project this dataset belongs to")
+    rdp.add_argument("--model", help="Model name which requires preprocessing (optional)")
     rdp.add_argument(
         "--variables",
         nargs="+",
@@ -519,7 +512,11 @@ def main():
         nargs="+",
         type=int,
         metavar="N",
-        help="Slice time dimension: END or START END [STEP]. A single value is the stop index (e.g. --time-slice 24 keeps the first 24 steps). Two or three values map to slice(start, end[, step]).",
+        help=(
+            "Slice time dimension: END or START END [STEP]. A single value is the stop "
+            "index (e.g. --time-slice 24 keeps the first 24 steps). Two or three values "
+            "map to slice(start, end[, step])."
+        ),
     )
     rdp.add_argument("--description", help="Dataset description (optional)")
     rdp.add_argument(
@@ -571,9 +568,7 @@ def main():
         help="Also remove the dataset file from storage",
     )
 
-    dadp = subparsers.add_parser(
-        "delete-all-datasets", help="Delete every registered dataset"
-    )
+    dadp = subparsers.add_parser("delete-all-datasets", help="Delete every registered dataset")
     dadp.add_argument(
         "--purge",
         action="store_true",
@@ -585,9 +580,7 @@ def main():
     )
     edp.add_argument("--id", required=True, help="Dataset ID to edit")
     edp.add_argument("--name", help="New display name")
-    edp.add_argument(
-        "--description", help="New description (pass empty string to clear)"
-    )
+    edp.add_argument("--description", help="New description (pass empty string to clear)")
     edp.add_argument(
         "--remove-variables",
         nargs="+",
@@ -666,7 +659,8 @@ def main():
             ]
         ):
             print(
-                "Error: specify at least one of --name, --description, --remove-variables, --units, --long-name, --colormap",
+                "Error: specify at least one of --name, --description, --remove-variables, "
+                "--units, --long-name, --colormap",
                 file=sys.stderr,
             )
             sys.exit(1)
