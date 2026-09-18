@@ -43,6 +43,7 @@ def _insert_dataset(project_id: str, ds_id: str | None = None) -> str:
 # init_database
 # ---------------------------------------------------------------------------
 
+
 def test_init_creates_all_tables():
     tables = {r[0] for r in _query("SELECT name FROM sqlite_master WHERE type='table'")}
     assert {"projects", "datasets", "variable_stats"} <= tables
@@ -51,6 +52,7 @@ def test_init_creates_all_tables():
 # ---------------------------------------------------------------------------
 # create_project
 # ---------------------------------------------------------------------------
+
 
 def test_create_project_returns_uuid():
     pid = register.create_project("Tokyo Heat")
@@ -72,6 +74,7 @@ def test_create_project_description_defaults_to_none():
 # ---------------------------------------------------------------------------
 # delete_project
 # ---------------------------------------------------------------------------
+
 
 def test_delete_project_removes_row():
     pid = register.create_project("To Delete")
@@ -96,6 +99,7 @@ def test_delete_project_unknown_id_exits():
 # ---------------------------------------------------------------------------
 # register_dataset validation
 # ---------------------------------------------------------------------------
+
 
 def test_register_dataset_rejects_unknown_project():
     with pytest.raises(SystemExit):

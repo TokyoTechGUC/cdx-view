@@ -14,7 +14,7 @@ from typing import TypedDict
 import dask
 import rioxarray
 import xarray as xr
-import xwrf
+import xwrf  # noqa: F401 (registers the .xwrf accessor)
 from dask.delayed import Delayed
 from rio_cogeo.cogeo import cog_validate
 
@@ -38,9 +38,7 @@ def _apply_model_specific_rules(ds: xr.Dataset, model: str | None) -> xr.Dataset
     # xwrf adds wrf_projection as a data variable storing the pyproj object;
     # write it as CRS metadata then drop it so zarr doesn't try to serialize it.
     if "wrf_projection" in ds.data_vars:
-        ds = ds.rio.write_crs(
-            ds["wrf_projection"].item(), grid_mapping_name="spatial_ref"
-        )
+        ds = ds.rio.write_crs(ds["wrf_projection"].item(), grid_mapping_name="spatial_ref")
         ds = ds.drop_vars("wrf_projection")
     return ds
 
@@ -138,15 +136,11 @@ def _filter_variables(ds: xr.Dataset, variables: list[str] | None) -> xr.Dataset
     missing = [v for v in variables if v not in ds.data_vars]
     if missing:
         available = sorted(ds.data_vars)
-        raise ValueError(
-            f"Requested variables not in dataset: {missing}. Available: {available}"
-        )
+        raise ValueError(f"Requested variables not in dataset: {missing}. Available: {available}")
     return ds[variables]
 
 
-def _slice_time(
-    ds: xr.Dataset, time_slice: tuple[int | None, ...] | None
-) -> xr.Dataset:
+def _slice_time(ds: xr.Dataset, time_slice: tuple[int | None, ...] | None) -> xr.Dataset:
     """Slice the time dimension. No-op if time_slice is None or no time dim.
 
     A single value is treated as stop (e.g. (24,) keeps the first 24 steps).
@@ -237,9 +231,7 @@ def preprocess(
     if file_path.suffix in (".tif", ".tiff"):
         # TIFF/COG: only cog is accepted, no conversion
         if rewrite is True:
-            raise ValueError(
-                "COG input cannot be rewritten; --rewrite is currently not supported."
-            )
+            raise ValueError("COG input cannot be rewritten; --rewrite is currently not supported.")
         if model is not None:
             raise ValueError(
                 "model is not supported for COG input: no model-specific "
@@ -278,9 +270,7 @@ def preprocess(
                 )
             stats_lazy = _compute_stats(ds)
             (computed_stats,) = dask.compute(stats_lazy)
-            return file_path, _build_variable_stats(
-                ds, computed_stats, long_name_overrides
-            )
+            return file_path, _build_variable_stats(ds, computed_stats, long_name_overrides)
 
     if file_path.suffix == ".nc":
         # NetCDF: always convert to Zarr
@@ -324,9 +314,7 @@ def preprocess(
                     "is written, so a time slice can't be applied. Drop "
                     "rewrite=False or omit time_slice."
                 )
-        with xr.open_zarr(
-            file_path, chunks="auto", mask_and_scale=True, decode_coords="all"
-        ) as ds:
+        with xr.open_zarr(file_path, chunks="auto", mask_and_scale=True, decode_coords="all") as ds:
             if rewrite is False:
                 if _resolve_dim_renames(ds):
                     raise ValueError(
@@ -334,9 +322,7 @@ def preprocess(
                         f"x/y/time (have: {sorted(ds.dims)})."
                     )
                 if not _has_crs(ds):
-                    raise ValueError(
-                        "rewrite=False requires an existing CRS on the source"
-                    )
+                    raise ValueError("rewrite=False requires an existing CRS on the source")
                 if crs is not None:
                     warnings.warn(
                         f"Dataset already has CRS ({ds.rio.crs}); ignoring crs={crs}.",

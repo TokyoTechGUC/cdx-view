@@ -31,9 +31,7 @@ def _clip(input_path: Path, bounds: tuple[float, float, float, float]) -> Path:
     west, south, east, north = bounds
     clip_path = input_path.with_name(input_path.stem + ".clip.tif")
     with rioxarray.open_rasterio(input_path, masked=True) as da:
-        clipped = da.rio.clip_box(
-            minx=west, miny=south, maxx=east, maxy=north, crs="EPSG:4326"
-        )
+        clipped = da.rio.clip_box(minx=west, miny=south, maxx=east, maxy=north, crs="EPSG:4326")
         clipped.rio.to_raster(clip_path)
     return clip_path
 
@@ -80,9 +78,7 @@ def convert(
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(
-        description="Convert a GeoTIFF to Cloud-Optimized GeoTIFF"
-    )
+    parser = argparse.ArgumentParser(description="Convert a GeoTIFF to Cloud-Optimized GeoTIFF")
     parser.add_argument("input", type=Path, help="Input GeoTIFF path")
     parser.add_argument(
         "--profile",

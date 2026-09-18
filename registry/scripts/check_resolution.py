@@ -12,7 +12,7 @@ import sys
 from pathlib import Path
 
 import morecantile
-import rioxarray  # noqa: registers the .rio accessor
+import rioxarray  # noqa: F401 (registers the .rio accessor)
 import xarray as xr
 from rasterio.rio.overview import get_maximum_overview_level
 from rasterio.warp import calculate_default_transform
