@@ -3,6 +3,7 @@
   import {
     datasetView,
     selectVariable,
+    setVariableColormap,
     setVariableTimes,
     setVariableRescale,
     clearVariableRescale,
@@ -14,6 +15,7 @@
   import { backgroundView } from "$lib/state/backgroundLayerState.svelte";
   import BackgroundLayerControl from "./BackgroundLayerControl.svelte";
   import { getDatasetInfo } from "$lib/api/tileServer";
+  import { COLORMAPS } from "$lib/colormaps";
   import { isJsonColormap } from "$lib/colormapFormat";
   import Colorbar from "./Colorbar.svelte";
   import ColorLegend from "./ColorLegend.svelte";
