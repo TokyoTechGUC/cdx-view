@@ -12,9 +12,7 @@ def main():
         description="Concatenate multiple NetCDF files into one along a shared time dimension."
     )
     parser.add_argument("files", nargs="+", type=Path, metavar="FILE")
-    parser.add_argument(
-        "--output", "-o", required=True, type=Path, help="Output NetCDF path"
-    )
+    parser.add_argument("--output", "-o", required=True, type=Path, help="Output NetCDF path")
     parser.add_argument(
         "--concat-dim",
         default=None,

@@ -9,6 +9,9 @@ import numpy as np
 import pytest
 import rioxarray  # noqa: F401 (registers the .rio accessor)
 import xarray as xr
+from rio_cogeo.cogeo import cog_translate
+from rio_cogeo.profiles import cog_profiles
+
 from preprocess import (
     _build_variable_stats,
     _compute_stats,
@@ -17,8 +20,6 @@ from preprocess import (
     _normalize_dims,
     preprocess,
 )
-from rio_cogeo.cogeo import cog_translate
-from rio_cogeo.profiles import cog_profiles
 
 
 def _make_ds(*, x_name="x", y_name="y", with_time=False, time_name="time", crs=None):
@@ -271,9 +272,7 @@ def test_preprocess_zarr_rewrite_true_explicit_same_as_default(tmp_path):
     src = tmp_path / "source.zarr"
     _write_zarr(src, _make_ds(x_name="lon", y_name="lat"))
 
-    out_path, stats = preprocess(
-        src, model=None, variables=["T2"], crs="EPSG:4326", rewrite=True
-    )
+    out_path, stats = preprocess(src, model=None, variables=["T2"], crs="EPSG:4326", rewrite=True)
 
     assert out_path != src
     assert stats["T2"]["vmin"] == 0.0
@@ -374,9 +373,7 @@ def test_preprocess_zarr_norewrite_and_default_agree_on_stats(tmp_path):
     src = tmp_path / "source.zarr"
     _write_zarr(src, _make_ds(with_time=True, crs="EPSG:32654"))
 
-    norewrite_out, norewrite_stats = preprocess(
-        src, model=None, variables=["T2"], rewrite=False
-    )
+    norewrite_out, norewrite_stats = preprocess(src, model=None, variables=["T2"], rewrite=False)
     default_out, default_stats = preprocess(src, model=None, variables=["T2"])
 
     assert norewrite_out == src
