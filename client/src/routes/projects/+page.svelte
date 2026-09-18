@@ -1,11 +1,18 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import { goto } from '$app/navigation';
-  import { base } from '$app/paths';
-  import { listProjects, getProject, getDatasetInfo } from '$lib/api/tileServer';
-  import type { ProjectSummary } from '$lib/types';
-  import { setProject } from '$lib/state/projectState.svelte';
-  import { datasetView, setVariableTimes } from '$lib/state/datasetState.svelte';
+  import { onMount } from "svelte";
+  import { goto } from "$app/navigation";
+  import { base } from "$app/paths";
+  import {
+    listProjects,
+    getProject,
+    getDatasetInfo,
+  } from "$lib/api/tileServer";
+  import type { ProjectSummary } from "$lib/types";
+  import { setProject } from "$lib/state/projectState.svelte";
+  import {
+    datasetView,
+    setVariableTimes,
+  } from "$lib/state/datasetState.svelte";
 
   let projects: ProjectSummary[] = $state([]);
   let loading = $state(true);
@@ -15,7 +22,7 @@
     try {
       projects = await listProjects();
     } catch (err) {
-      error = err instanceof Error ? err.message : 'Unknown error';
+      error = err instanceof Error ? err.message : "Unknown error";
     } finally {
       loading = false;
     }
@@ -25,7 +32,12 @@
     const project = await getProject(summary.id);
     setProject(project);
     const { dataset, selectedVariable: selected } = datasetView;
-    if (selected && dataset && dataset.format !== 'cog' && selected.times === null) {
+    if (
+      selected &&
+      dataset &&
+      dataset.format !== "cog" &&
+      selected.times === null
+    ) {
       const info = await getDatasetInfo(dataset.id, selected.name);
       if (info.times) setVariableTimes(selected.name, info.times);
     }
@@ -44,7 +56,7 @@
     <div class="status">No projects available</div>
   {:else}
     <div class="grid">
-      {#each projects as project}
+      {#each projects as project (project.id)}
         <button class="card" onclick={() => onSelectProject(project)}>
           <h2>{project.title}</h2>
           {#if project.description}
