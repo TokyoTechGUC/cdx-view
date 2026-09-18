@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { datasetView } from '$lib/state/datasetState.svelte';
-  import { mapView, setOpacity } from '$lib/state/mapState.svelte';
+  import { datasetView } from "$lib/state/datasetState.svelte";
+  import { mapView, setOpacity } from "$lib/state/mapState.svelte";
 
   interface Props {
     panelOpen?: boolean;
@@ -43,7 +43,10 @@
     color: #fff;
     border-radius: 10px;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
-    font-family: system-ui, -apple-system, sans-serif;
+    font-family:
+      system-ui,
+      -apple-system,
+      sans-serif;
     font-size: 0.85rem;
     backdrop-filter: blur(6px);
   }

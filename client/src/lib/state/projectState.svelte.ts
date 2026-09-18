@@ -1,6 +1,9 @@
-import type { Dataset, ProjectDetail } from '$lib/types';
-import { clearDataset, selectDataset } from './datasetState.svelte';
-import { clearBackgroundLayers, loadBackgroundLayers } from './backgroundLayerState.svelte';
+import type { Dataset, ProjectDetail } from "$lib/types";
+import { clearDataset, selectDataset } from "./datasetState.svelte";
+import {
+  clearBackgroundLayers,
+  loadBackgroundLayers,
+} from "./backgroundLayerState.svelte";
 
 interface ProjectState {
   project: ProjectDetail | null;
@@ -33,7 +36,7 @@ export function setProject(project: ProjectDetail) {
 }
 
 export function setActiveDataset(datasetId: string) {
-  const dataset = state.project?.datasets.find(d => d.id === datasetId);
+  const dataset = state.project?.datasets.find((d) => d.id === datasetId);
   if (!dataset) return;
   state.activeDatasetId = datasetId;
   selectDataset(dataset);

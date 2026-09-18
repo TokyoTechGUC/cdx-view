@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { fetchColormap, type ColormapLUT } from '$lib/api/colormaps';
+  import { fetchColormap, type ColormapLUT } from "$lib/api/colormaps";
 
   interface Props {
     name: string;
@@ -9,7 +9,14 @@
     onrescale: () => void;
     onreset: () => void;
   }
-  let { name, units, editMin = $bindable(), editMax = $bindable(), onrescale, onreset }: Props = $props();
+  let {
+    name,
+    units,
+    editMin = $bindable(),
+    editMax = $bindable(),
+    onrescale,
+    onreset,
+  }: Props = $props();
 
   let lut: ColormapLUT | null = $state(null);
 
@@ -27,7 +34,7 @@
   });
 
   const gradient = $derived(
-    lut ? lutToGradient(lut) : 'linear-gradient(to right, #ddd, #ddd)',
+    lut ? lutToGradient(lut) : "linear-gradient(to right, #ddd, #ddd)",
   );
 
   function lutToGradient(table: ColormapLUT): string {
@@ -36,20 +43,32 @@
         const pct = (i / (table.length - 1)) * 100;
         return `rgba(${rgba[0]}, ${rgba[1]}, ${rgba[2]}, ${(rgba[3] / 255).toFixed(2)}) ${pct.toFixed(2)}%`;
       })
-      .join(', ');
+      .join(", ");
     return `linear-gradient(to right, ${stops})`;
   }
-
-
 </script>
 
 <div class="colorbar">
   <div class="bar" style="background: {gradient}"></div>
   <div class="labels">
-    <input class="label-input" type="text" inputmode="decimal" bind:value={editMin} oninput={onrescale} />
+    <input
+      class="label-input"
+      type="text"
+      inputmode="decimal"
+      bind:value={editMin}
+      oninput={onrescale}
+    />
     {#if units}<span class="units">{units}</span>{/if}
-    <input class="label-input label-input--right" type="text" inputmode="decimal" bind:value={editMax} oninput={onrescale} />
-    <button class="reset-btn" onclick={onreset} title="Reset to defaults">↺</button>
+    <input
+      class="label-input label-input--right"
+      type="text"
+      inputmode="decimal"
+      bind:value={editMax}
+      oninput={onrescale}
+    />
+    <button class="reset-btn" onclick={onreset} title="Reset to defaults"
+      >↺</button
+    >
   </div>
 </div>
 
