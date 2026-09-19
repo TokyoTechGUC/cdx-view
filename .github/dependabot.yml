@@ -1,0 +1,64 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/client"
+    schedule:
+      interval: "monthly"
+    groups:
+      all-updates:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "uv"
+    directory: "/server"
+    schedule:
+      interval: "monthly"
+    groups:
+      all-updates:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "uv"
+    directory: "/registry"
+    schedule:
+      interval: "monthly"
+    groups:
+      all-updates:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "docker"
+    directory: "/server"
+    schedule:
+      interval: "monthly"
+    groups:
+      all-updates:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "docker"
+    directory: "/registry"
+    schedule:
+      interval: "monthly"
+    groups:
+      all-updates:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "docker"
+    directory: "/client"
+    schedule:
+      interval: "monthly"
+    groups:
+      all-updates:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    groups:
+      all-updates:
+        patterns:
+          - "*"
