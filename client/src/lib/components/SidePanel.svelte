@@ -3,6 +3,7 @@
   import {
     datasetView,
     selectVariable,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- only used by the disabled colormap picker below; kept so re-enabling it doesn't also require re-adding this import
     setVariableColormap,
     setVariableTimes,
     setVariableRescale,
@@ -15,6 +16,7 @@
   import { backgroundView } from "$lib/state/backgroundLayerState.svelte";
   import BackgroundLayerControl from "./BackgroundLayerControl.svelte";
   import { getDatasetInfo } from "$lib/api/tileServer";
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- only used by the disabled colormap picker below; kept so re-enabling it doesn't also require re-adding this import
   import { COLORMAPS } from "$lib/colormaps";
   import { isJsonColormap } from "$lib/colormapFormat";
   import Colorbar from "./Colorbar.svelte";
