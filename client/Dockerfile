@@ -1,4 +1,4 @@
-FROM node:24 AS base
+FROM node:25 AS base
 WORKDIR /app
 COPY package*.json ./
 
@@ -29,7 +29,7 @@ ENV BASE_PATH=$BASE_PATH
 RUN npm run build
 
 # Production stage
-FROM node:24 AS production
+FROM node:25 AS production
 ENV NODE_ENV=production
 WORKDIR /app
 COPY --chown=node:node --from=builder /app/build ./build
