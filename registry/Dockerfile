@@ -13,7 +13,7 @@ RUN uv sync --locked
 FROM builder-base AS builder-production
 RUN uv sync --locked --no-dev
 
-FROM python:3.10-slim-bookworm AS base
+FROM python:3.14-slim-bookworm AS base
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libexpat1 \
     && rm -rf /var/lib/apt/lists/*
